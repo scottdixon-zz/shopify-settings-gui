@@ -36,13 +36,26 @@ class App extends Component {
         "settings": [
           {
             "type": "heading",
-            "content": "Text"
+            "content": "Heading Example"
           },
           {
             "type": "color",
-            "label": "Headings",
-            "id": "color_headings",
+            "label": "Colour Example",
+            "id": "color_example",
             "default": "#333333"
+          },
+          {
+             "type": "text",
+             "id": "text_example",
+             "default": "",
+             "placeholder": "placeholder",
+             "label": "Text Example",
+          },
+          {
+             "type": "textarea",
+             "id": "textarea_example",
+             "label": "Textarea Example",
+             "info": ""
           }
         ]
       },
@@ -101,6 +114,25 @@ class App extends Component {
                                     <div style={{ background: setting.default, borderRadius: '3px', height: '19px', width: '38px' }}></div>
                                     <p>{ setting.label }</p>
                                   </Stack>
+                                )
+                              } else if (setting.type === 'text') {
+                                return (
+                                  <TextField
+                                    label={ setting.label }
+                                    value={ setting.default }
+                                    helpText={ setting.info }
+                                    placeholder={ setting.placeholder }
+                                  />
+                                )
+                              } else if (setting.type === 'textarea') {
+                                return (
+                                  <TextField
+                                    label={ setting.label }
+                                    value={ setting.default }
+                                    helpText={ setting.info }
+                                    placeholder={ setting.placeholder }
+                                    multiline
+                                  />
                                 )
                               } else {
                                 console.log('Unrecognized type:', setting.type)
