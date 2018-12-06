@@ -3,6 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, DropZone, FormLayout, ChoiceList, Checkbox, Select, RangeSlider } from '@shopify/polaris';
 
+import Input from './components/Input';
+
+import settingsSchema from './settings_schema.js';
+
 const splitByHeadings = (section) => {
   let split = [];
   let temp = [];
@@ -21,112 +25,22 @@ const splitByHeadings = (section) => {
 
 class App extends Component {
   state = {
-    value: '',
-    json: [
-      {
-        "name": "theme_info",
-        "theme_name": "Debut",
-        "theme_author": "Shopify",
-        "theme_version": "10.1.1",
-        "theme_documentation_url": "https:\/\/help.shopify.com\/manual\/using-themes\/themes-by-shopify\/debut",
-        "theme_support_url": "https:\/\/support.shopify.com\/"
-      },
-      {
-        "name": "Colors",
-        "settings": [
-          {
-            "type": "heading",
-            "content": "Heading Example"
-          },
-          {
-            "type": "color",
-            "label": "Colour Example",
-            "id": "color_example",
-            "default": "#333333"
-          },
-          {
-             "type": "text",
-             "id": "text_example",
-             "default": "",
-             "placeholder": "placeholder",
-             "label": "Text Example",
-          },
-          {
-             "type": "textarea",
-             "id": "textarea_example",
-             "label": "Textarea Example",
-             "info": ""
-          },
-          {
-             "type":      "radio",
-             "id":        "radio_example",
-             "label":     "Radio Example",
-             "options": [
-               { "value": "one", "label": "Radio one" },
-               { "value": "two", "label": "Radio two" }
-             ],
-             "default":   "two"
-          },
-          {
-             "type":      "checkbox",
-             "id":        "checkbox_example",
-             "label":     "Checkbox Example",
-             "default":   false,
-             "info":      "Text"
-          },
-          {
-             "type":      "select",
-             "id":        "select_example",
-             "label":     "Select Example",
-             "options": [
-               {
-                 "value": "Option 1",
-                 "label": "Option 1"
-               },
-               {
-                 "value": "Option 2",
-                 "label": "Option 2"
-               }
-             ],
-             "default":   "Option 2",
-             "info":      "Text"
-          },
-          {
-            "type":      "range",
-            "id":        "range_example",
-            "min":       12,
-            "max":        18,
-            "step":       1,
-            "unit":       "px",
-            "label":     "Range Example",
-            "default":   16,
-            "info": "slide me!"
-          },
-          {
-            "type": "image_picker",
-            "id": "image_picker_example",
-            "label": "Image Picker Example"
-          }
-        ]
-      },
-      {
-        "name": "Typography"
-      }
-    ]
+    tempJson: '',
+    settingsSchema
   };
   
   componentDidMount = () => {
     this.setState({
-      value: JSON.stringify(this.state.json, null, 4)
+      tempJson: JSON.stringify(this.state.settingsSchema, null, 4)
     })
   }
 
-  handleChange = (value) => {
-    this.setState({ value });
+  handleChange = (tempJson) => {
+    this.setState({ tempJson });
     try {
-      const json = JSON.parse(value);
-      this.setState({ json });
-      console.log('Valid JSON', json)
+      const settingsSchema = JSON.parse(tempJson);
+      this.setState({ settingsSchema });
+      console.log('Valid JSON')
     } catch (e) {
       console.log('Waiting for valid JSON')
     }
@@ -139,10 +53,10 @@ class App extends Component {
         <Layout>
           <Layout.Section secondary>
           <Card>
-            { this.state.json.map && this.state.json.map((section) => {
-              if (section.name == 'theme_info') {
-                return
-              }
+            { this.state.settingsSchema.map && this.state.settingsSchema.map((section) => {
+              // Ignore theme info
+              if (section.name == 'theme_info') return
+              
               return (
                 <div>
                   <Card.Section>
@@ -153,90 +67,7 @@ class App extends Component {
                       return (
                         <Card sectioned>
                           <FormLayout>
-                            { headings && headings.map(setting => {
-                              if (setting.type === 'heading') {
-                                return (
-                                  <Subheading>{ setting.content }</Subheading>
-                                )
-                              } else if (setting.type === 'color') {
-                                return (
-                                  <Stack wrap={false}>
-                                    <div style={{ background: setting.default, borderRadius: '3px', height: '19px', width: '38px' }}></div>
-                                    <p>{ setting.label }</p>
-                                  </Stack>
-                                )
-                              } else if (setting.type === 'text') {
-                                return (
-                                  <TextField
-                                    label={ setting.label }
-                                    value={ setting.default }
-                                    helpText={ setting.info }
-                                    placeholder={ setting.placeholder }
-                                  />
-                                )
-                              } else if (setting.type === 'textarea') {
-                                return (
-                                  <TextField
-                                    label={ setting.label }
-                                    value={ setting.default }
-                                    helpText={ setting.info }
-                                    placeholder={ setting.placeholder }
-                                    multiline
-                                  />
-                                )
-                              } else if (setting.type === 'radio') {
-                                return (
-                                  <ChoiceList
-                                    title={ setting.label }
-                                    choices={ setting.options }
-                                    selected={ setting.default }
-                                  />
-                                )
-                              } else if (setting.type === 'checkbox') {
-                                return (
-                                  <Checkbox
-                                    checked={ setting.default }
-                                    label={ setting.label }
-                                    helpText={ setting.info }
-                                  />
-                                )
-                              } else if (setting.type === 'select') {
-                                return (
-                                  <Select
-                                    label={ setting.label }
-                                    options={ setting.options }
-                                    value={ setting.default }
-                                    helpText={ setting.info }
-                                  />
-                                )
-                              } else if (setting.type === 'range') {
-                                return (
-                                  <RangeSlider
-                                    label={ setting.label }
-                                    options={ setting.options }
-                                    value={ setting.default }
-                                    helpText={ setting.info }
-                                  />
-                                )
-                              } else if (setting.type === 'range') {
-                                return (
-                                  <RangeSlider
-                                    label={ setting.label }
-                                    options={ setting.options }
-                                    value={ setting.default }
-                                    helpText={ setting.info }
-                                  />
-                                )
-                              } else if (setting.type === 'image_picker') {
-                                return (
-                                  <DropZone label={ setting.label } type="image">
-                                    <DropZone.FileUpload />
-                                  </DropZone>
-                                )
-                              } else {
-                                console.log('Unrecognized type:', setting.type)
-                              }
-                            })}
+                            { headings && headings.map(setting => <Input {...setting}/>) }
                           </FormLayout>
                         </Card>
                       )
@@ -251,11 +82,10 @@ class App extends Component {
             <Card>
               <Card.Section>
                 <TextField
-                  label="Shipping address"
                   labelHidden="true"
                   placeholder="json"
                   onChange={this.handleChange}
-                  value={this.state.value}
+                  value={this.state.tempJson}
                   multiline
                 />
               </Card.Section>
