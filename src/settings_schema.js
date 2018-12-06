@@ -31,7 +31,6 @@ export default [
          "type": "textarea",
          "id": "textarea_example",
          "label": "Textarea Example",
-         "info": ""
       },
       {
          "type":      "radio",
@@ -48,7 +47,6 @@ export default [
          "id":        "checkbox_example",
          "label":     "Checkbox Example",
          "default":   false,
-         "info":      "Text"
       },
       {
          "type":      "select",
@@ -65,7 +63,6 @@ export default [
            }
          ],
          "default":   "Option 2",
-         "info":      "Text"
       },
       {
         "type":      "range",
@@ -76,7 +73,6 @@ export default [
         "unit":       "px",
         "label":     "Range Example",
         "default":   16,
-        "info": "slide me!"
       },
       {
         "type": "image_picker",

@@ -23,10 +23,21 @@ const inputMap = {
   image_picker: ImagePicker,
 }
 
+const translate = (content) => {
+  if (typeof(content) === 'object') {
+    // Pull out english if it's available otherwise the first translation
+    return content['en'] || content[Object.keys(content)[0]]
+  } else {
+    return content;
+  }
+}
+
 function Input(props) {
   const settings = {...props}
   settings.value = settings.default
-  settings.helpText = settings.info
+  settings.helpText = translate(settings.info)
+  settings.label = translate(settings.label)
+  settings.content = translate(settings.content)
   settings.choices = settings.options
   settings.selected = settings.default
   

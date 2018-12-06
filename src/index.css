@@ -16,3 +16,7 @@ code {
 textarea {
   min-height: 66px !important;
 }
+
+.sticky-json textarea {
+  height: 94vh !important;
+}

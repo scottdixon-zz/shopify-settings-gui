@@ -2,26 +2,10 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, DropZone, FormLayout, ChoiceList, Checkbox, Select, RangeSlider } from '@shopify/polaris';
-
+import Sticky from 'react-stickynode';
 import Input from './components/Input';
-
 import settingsSchema from './settings_schema.js';
-
-const splitByHeadings = (section) => {
-  let split = [];
-  let temp = [];
-  for (let subsection of section) {
-    if (subsection.type === 'heading' && temp.length) {
-      // Push what we have so far and reset temp
-      split.push([...temp]);
-      temp = [];
-    }
-    temp.push(subsection);
-  }
-  split.push([...temp]);
-  return split;
-}
-
+import { splitByHeadings, translate } from './utils';
 
 class App extends Component {
   state = {
@@ -60,7 +44,7 @@ class App extends Component {
               return (
                 <div>
                   <Card.Section>
-                    <p>{ section.name }</p>
+                    <p>{ translate(section.name) }</p>
                   </Card.Section>
                   <Card sectioned subdued>
                     { section.settings && splitByHeadings(section.settings).map(headings => {
@@ -79,17 +63,20 @@ class App extends Component {
           </Card>
           </Layout.Section>
           <Layout.Section secondary>
-            <Card>
-              <Card.Section>
-                <TextField
-                  labelHidden="true"
-                  placeholder="json"
-                  onChange={this.handleChange}
-                  value={this.state.tempJson}
-                  multiline
-                />
-              </Card.Section>
-            </Card>
+            <Sticky enabled={true} top={0} className="sticky-json">
+              <Card>
+                <Card.Section>
+                  <TextField
+                    labelHidden="true"
+                    placeholder="json"
+                    onChange={this.handleChange}
+                    value={this.state.tempJson}
+                    multiline
+                  />
+                </Card.Section>
+              </Card>
+            </Sticky>
+            
           </Layout.Section>
         </Layout>
       </Page>
