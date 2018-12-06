@@ -1,7 +1,23 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Heading } from '@shopify/polaris';
+import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, FormLayout } from '@shopify/polaris';
+
+const splitByHeadings = (section) => {
+  let split = [];
+  let temp = [];
+  for (let subsection of section) {
+    if (subsection.type === 'heading' && temp.length) {
+      // Push what we have so far and reset temp
+      split.push([...temp]);
+      temp = [];
+    }
+    temp.push(subsection);
+  }
+  split.push([...temp]);
+  return split;
+}
+
 
 class App extends Component {
   state = {
@@ -19,10 +35,14 @@ class App extends Component {
         "name": "Colors",
         "settings": [
           {
+            "type": "heading",
+            "content": "Text"
+          },
+          {
             "type": "color",
-            "id": "color_text",
-            "label": "Titles and headings",
-            "default": "#3d4246"
+            "label": "Headings",
+            "id": "color_headings",
+            "default": "#333333"
           }
         ]
       },
@@ -66,9 +86,32 @@ class App extends Component {
                     <p>{ section.name }</p>
                   </Card.Section>
                   <Card sectioned subdued>
-                    <Card sectioned>
-                      <Heading>Online store dashboard</Heading>
-                    </Card>
+                    { section.settings && splitByHeadings(section.settings).map(headings => {
+                      return (
+                        <Card sectioned>
+                          <FormLayout>
+                            { headings && headings.map(setting => {
+                              if (setting.type === 'heading') {
+                                return (
+                                  <Subheading>{ setting.content }</Subheading>
+                                )
+                              } else if (setting.type === 'color') {
+                                return (
+                                  <Stack wrap={false}>
+                                    <div style={{ background: setting.default, borderRadius: '3px', height: '19px', width: '38px' }}></div>
+                                    <p>{ setting.label }</p>
+                                  </Stack>
+                                )
+                              } else {
+                                console.log('Unrecognized type:', setting.type)
+                              }
+                            })}
+                          </FormLayout>
+                        </Card>
+                      )
+                    }) }
+                  
+                    
                   </Card>
                 </div>
               )
