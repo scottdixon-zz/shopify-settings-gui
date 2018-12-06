@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, FormLayout, ChoiceList, Checkbox } from '@shopify/polaris';
+import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, DropZone, FormLayout, ChoiceList, Checkbox, Select, RangeSlider } from '@shopify/polaris';
 
 const splitByHeadings = (section) => {
   let split = [];
@@ -73,6 +73,39 @@ class App extends Component {
              "label":     "Checkbox Example",
              "default":   false,
              "info":      "Text"
+          },
+          {
+             "type":      "select",
+             "id":        "select_example",
+             "label":     "Select Example",
+             "options": [
+               {
+                 "value": "Option 1",
+                 "label": "Option 1"
+               },
+               {
+                 "value": "Option 2",
+                 "label": "Option 2"
+               }
+             ],
+             "default":   "Option 2",
+             "info":      "Text"
+          },
+          {
+            "type":      "range",
+            "id":        "range_example",
+            "min":       12,
+            "max":        18,
+            "step":       1,
+            "unit":       "px",
+            "label":     "Range Example",
+            "default":   16,
+            "info": "slide me!"
+          },
+          {
+            "type": "image_picker",
+            "id": "image_picker_example",
+            "label": "Image Picker Example"
           }
         ]
       },
@@ -167,6 +200,39 @@ class App extends Component {
                                     helpText={ setting.info }
                                   />
                                 )
+                              } else if (setting.type === 'select') {
+                                return (
+                                  <Select
+                                    label={ setting.label }
+                                    options={ setting.options }
+                                    value={ setting.default }
+                                    helpText={ setting.info }
+                                  />
+                                )
+                              } else if (setting.type === 'range') {
+                                return (
+                                  <RangeSlider
+                                    label={ setting.label }
+                                    options={ setting.options }
+                                    value={ setting.default }
+                                    helpText={ setting.info }
+                                  />
+                                )
+                              } else if (setting.type === 'range') {
+                                return (
+                                  <RangeSlider
+                                    label={ setting.label }
+                                    options={ setting.options }
+                                    value={ setting.default }
+                                    helpText={ setting.info }
+                                  />
+                                )
+                              } else if (setting.type === 'image_picker') {
+                                return (
+                                  <DropZone label={ setting.label } type="image">
+                                    <DropZone.FileUpload />
+                                  </DropZone>
+                                )
                               } else {
                                 console.log('Unrecognized type:', setting.type)
                               }
@@ -175,8 +241,6 @@ class App extends Component {
                         </Card>
                       )
                     }) }
-                  
-                    
                   </Card>
                 </div>
               )
