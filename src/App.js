@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, FormLayout } from '@shopify/polaris';
+import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, FormLayout, ChoiceList, Checkbox } from '@shopify/polaris';
 
 const splitByHeadings = (section) => {
   let split = [];
@@ -56,6 +56,23 @@ class App extends Component {
              "id": "textarea_example",
              "label": "Textarea Example",
              "info": ""
+          },
+          {
+             "type":      "radio",
+             "id":        "radio_example",
+             "label":     "Radio Example",
+             "options": [
+               { "value": "one", "label": "Radio one" },
+               { "value": "two", "label": "Radio two" }
+             ],
+             "default":   "two"
+          },
+          {
+             "type":      "checkbox",
+             "id":        "checkbox_example",
+             "label":     "Checkbox Example",
+             "default":   false,
+             "info":      "Text"
           }
         ]
       },
@@ -132,6 +149,22 @@ class App extends Component {
                                     helpText={ setting.info }
                                     placeholder={ setting.placeholder }
                                     multiline
+                                  />
+                                )
+                              } else if (setting.type === 'radio') {
+                                return (
+                                  <ChoiceList
+                                    title={ setting.label }
+                                    choices={ setting.options }
+                                    selected={ setting.default }
+                                  />
+                                )
+                              } else if (setting.type === 'checkbox') {
+                                return (
+                                  <Checkbox
+                                    checked={ setting.default }
+                                    label={ setting.label }
+                                    helpText={ setting.info }
                                   />
                                 )
                               } else {
