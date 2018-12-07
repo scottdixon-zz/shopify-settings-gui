@@ -13,48 +13,42 @@ class App extends Component {
     tempJson: '',
     settingsSchema
   };
-  
+
   onDragEnd = (result) => {
     console.log(result)
     const { destination, source, draggableId } = result;
     if (!destination) {
       return;
     }
-    const destinationSectionIndex = this.state.settingsSchema.findIndex(setting => {
-      return setting.name === destination.droppableId.split('_')[0]
-    })
 
+    // Which section is our source in?
     const sourceSectionIndex = this.state.settingsSchema.findIndex(setting => {
       return setting.name === source.droppableId.split('_')[0]
     })
 
+    // Which section is our source going to?
+    const destinationSectionIndex = this.state.settingsSchema.findIndex(setting => {
+      return setting.name === destination.droppableId.split('_')[0]
+    })
+
+    // Clone the settings 
     const settings = [...this.state.settingsSchema];
 
-    console.log('SOURCE INDEX', sourceSectionIndex)
-    console.log('DESTINATION INDEX', sourceSectionIndex)
-
-    const setting = settings[sourceSectionIndex].settings[source.index];
-
-    console.log(settings[destinationSectionIndex])
-
+    // Reference the input, move it
+    const input = settings[sourceSectionIndex].settings[source.index];
     settings[sourceSectionIndex].settings.splice(source.index, 1);
-    settings[sourceSectionIndex].settings.splice(destination.index, 0, setting);
+    settings[sourceSectionIndex].settings.splice(destination.index, 0, input);
 
-    // settings[destinationSectionIndex].settings.splice(destination.index, 0, setting)
-    console.log(settings)
-    //
-    this.setState({ settingsSchema: settings })
-    // console.log(destinationIndex)
+    this.outputSchema();
+  }
 
-    this.setState({
-      tempJson: JSON.stringify(this.state.settingsSchema, null, 4)
-    })
+  outputSchema = () => {
+    const output = [...this.state.settingsSchema];
+    this.setState({ tempJson: JSON.stringify(output, null, 4) });
   }
 
   componentDidMount = () => {
-    this.setState({
-      tempJson: JSON.stringify(this.state.settingsSchema, null, 4)
-    })
+    this.outputSchema();
   }
 
   handleChange = (tempJson) => {

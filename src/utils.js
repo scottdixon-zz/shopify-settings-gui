@@ -2,7 +2,7 @@ const splitByHeaders = (section) => {
   let split = [];
   let temp = [];
   for (let subsectionIndex in section) {
-    let subsection = section[subsectionIndex]
+    let subsection = {...section[subsectionIndex]}
     subsection.originalIndex = subsectionIndex
     if (subsection.type === 'header' && temp.length) {
       // Push what we have so far and reset temp

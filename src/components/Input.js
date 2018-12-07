@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import Color from './Color';
 import Heading from './Heading';
 import ImagePicker from './ImagePicker';
 import TextArea from './TextArea';
-import { 
+import {
   TextField,
   ChoiceList,
   Checkbox,
@@ -41,7 +41,7 @@ function Input(props) {
   settings.content = translate(settings.content)
   settings.choices = settings.options
   settings.selected = settings.default
-  
+
   const DynamicComponent = inputMap[settings.type]
   return (
     <Draggable draggableId={settings.id} index={parseInt(settings.originalIndex)}>

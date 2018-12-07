@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Subheading } from '@shopify/polaris';
 
 function Heading(props) {

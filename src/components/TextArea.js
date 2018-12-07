@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TextField } from '@shopify/polaris';
 
 function TextArea(props) {
