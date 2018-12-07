@@ -104,6 +104,10 @@ class App extends Component {
                   </Card.Section>
                   <Card sectioned subdued>
                     { section.settings && splitByHeaders(section.settings).map(headers => {
+                      if (!headers[0]) {
+                        return
+                      }
+
                       const id = headers[0].id || translate(headers[0].content) || translate(headers[0].label)
                       console.log(headers)
                       return (
