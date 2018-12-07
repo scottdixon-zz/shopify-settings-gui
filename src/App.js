@@ -38,27 +38,21 @@ class App extends Component {
     // Clone the settings
     const settings = [...this.state.settingsSchema];
 
-    let desinationIndex = destination.index + Number(destination.droppableId.split('-')[1]);
+    let desinationIndex = destination.index;
     let input;
 
     if (source.droppableId === 'toolbar') {
+      // if (settings[sourceSectionIndex].settings.find(setting => setting.content === 'HEADERZ')) {
+      //
+      // }
       input = { type: "header", content: "HEADERZ" }
-
     } else {
       // Reference the input, move it
       input = settings[sourceSectionIndex].settings[source.index];
       settings[sourceSectionIndex].settings.splice(source.index, 1);
-
-      if (desinationIndex >= source.index) {
-        desinationIndex--;
-      }
     }
 
     settings[destinationSectionIndex].settings.splice(desinationIndex, 0, input);
-
-
-
-
 
 
     this.outputSchema();
@@ -103,43 +97,45 @@ class App extends Component {
                     <p>{ translate(section.name) }</p>
                   </Card.Section>
                   <Card sectioned subdued>
+
+                  <Droppable droppableId={`${translate(section.name)}`}>
+                      {(provided, snapshot) => (
+                        <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? 'card-dragging-over' : ''}>
+
                     { section.settings && splitByHeaders(section.settings).map(headers => {
                       if (!headers[0]) {
                         return
                       }
+                      console.log(snapshot)
 
-                      const id = headers[0].id || translate(headers[0].content) || translate(headers[0].label)
-                      console.log(headers)
+                      const id = section.name + (headers[0].id || translate(headers[0].content) || translate(headers[0].label))
+                      console.log(id)
                       return (
-                        <Card sectioned key={id}>
-                          <Droppable droppableId={`${translate(section.name)}_${id}-${headers[0].originalIndex}`}>
-                              {(provided) => (
-                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                        <Card sectioned key={id} subdued={snapshot.isDraggingOver}>
                                   <FormLayout>
                                     { headers && headers.map(setting => {
-                                      let inputId;
-                                      if (setting.id) {
-                                        inputId = setting.id;
-                                      } else if (setting.label) {
-                                        inputId = id + translate(setting.label);
-                                      } else if (setting.content) {
-                                        inputId = id + translate(setting.content);
-                                      }
-                                      setting.id = inputId
-                                      return (
-                                        <Input {...setting} key={inputId} />
-                                      )
-                                    })
-                                  }
-                                  { provided.placeholder }
+                                        let inputId;
+                                        if (setting.id) {
+                                          inputId = setting.id;
+                                        } else if (setting.label) {
+                                          inputId = id + translate(setting.label);
+                                        } else if (setting.content) {
+                                          inputId = id + translate(setting.content);
+                                        }
+                                        setting.id = inputId
+                                        return (
+                                          <Input {...setting} key={inputId} />
+                                        )
+                                      })
+                                    }
                                   </FormLayout>
-                                </div>
-                              )}
-
-                          </Droppable>
                         </Card>
                       )
                     }) }
+
+                    </div>
+                  )}
+              </Droppable>
                   </Card>
                 </div>
               )

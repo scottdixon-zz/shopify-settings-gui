@@ -21,6 +21,7 @@ textarea {
   height: 94vh !important;
 }
 
-.draggable {
-  background: #fff;
+.card-dragging-over .Polaris-Card{
+  overflow: visible !important;
+  box-shadow: none !important;
 }
