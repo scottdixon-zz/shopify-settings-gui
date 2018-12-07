@@ -48,7 +48,7 @@ function Input(props) {
     {provided => {
       return (
         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="draggable">
-          <DynamicComponent {...settings} />
+          { DynamicComponent ? <DynamicComponent {...settings} /> : <p><strong>{settings.type}</strong> not supported yet!</p> }
         </div>
       )
     }}
