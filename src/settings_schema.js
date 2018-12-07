@@ -4,8 +4,8 @@ export default [
     "theme_name": "Debut",
     "theme_author": "Shopify",
     "theme_version": "10.1.1",
-    "theme_documentation_url": "https:\/\/help.shopify.com\/manual\/using-themes\/themes-by-shopify\/debut",
-    "theme_support_url": "https:\/\/support.shopify.com\/"
+    "theme_documentation_url": "https://help.shopify.com/manual/using-themes/themes-by-shopify/debut",
+    "theme_support_url": "https://support.shopify.com/"
   },
   {
     "name": "Colors",
@@ -90,7 +90,7 @@ export default [
     "settings": [
       {
         "type": "header",
-        "content": "Another Heading Example"
+        "content": "Boop"
       }
     ]
   }

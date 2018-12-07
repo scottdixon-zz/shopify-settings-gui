@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheading, Stack, Badge, DropZone, FormLayout, ChoiceList, Checkbox, Select, RangeSlider } from '@shopify/polaris';
+import { AppProvider, Page, Card, Layout, TextField, FormLayout } from '@shopify/polaris';
 import Sticky from 'react-stickynode';
 import Input from './components/Input';
 import settingsSchema from './settings_schema.js';
@@ -15,20 +14,23 @@ class App extends Component {
   };
 
   onDragEnd = (result) => {
-    const { destination, source, draggableId } = result;
+    console.dir(result)
+    const { destination, source } = result;
     if (!destination) {
       return;
     }
 
     // Which section is our source in?
     const sourceSectionIndex = this.state.settingsSchema.findIndex(setting => {
-      return setting.name === source.droppableId.split('_')[0]
+      return translate(setting.name) === source.droppableId.split('_')[0]
     })
 
     // Which section is our source going to?
     const destinationSectionIndex = this.state.settingsSchema.findIndex(setting => {
-      return setting.name === destination.droppableId.split('_')[0]
+      return translate(setting.name) === destination.droppableId.split('_')[0]
     })
+
+    console.log('S:', sourceSectionIndex, 'D:', destinationSectionIndex)
 
     // Clone the settings
     const settings = [...this.state.settingsSchema];
@@ -55,9 +57,9 @@ class App extends Component {
     try {
       const settingsSchema = JSON.parse(tempJson);
       this.setState({ settingsSchema });
-      console.log('Valid JSON')
+      console.log('Valid JSON');
     } catch (e) {
-      console.log('Waiting for valid JSON')
+      console.log('Waiting for valid JSON');
     }
   };
 
@@ -72,43 +74,39 @@ class App extends Component {
             {
               this.state.settingsSchema.map && this.state.settingsSchema.map((section) => {
 
-              let originalIndex = 0;
-
               if (section.name == 'theme_info') return
+
               return (
-                <div key={section.name}>
+                <div key={translate(section.name)}>
                   <Card.Section>
                     <p>{ translate(section.name) }</p>
                   </Card.Section>
                   <Card sectioned subdued>
                     { section.settings && splitByHeaders(section.settings).map(headers => {
-
-                      const id = headers[0].content
+                      const id = headers[0].id || translate(headers[0].content) || translate(headers[0].label)
                       return (
                         <Card sectioned key={id}>
-                          <Droppable droppableId={`${section.name}_${id}`}>
-
+                          <Droppable droppableId={`${translate(section.name)}_${id}`}>
                               {(provided) => (
                                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                                <FormLayout>
-
-                                { headers && headers.map(setting => {
-                                  let inputId;
-                                  if (setting.id) {
-                                    inputId = setting.id;
-                                  } else if (setting.label) {
-                                    inputId = id + setting.label;
-                                  } else if (setting.content) {
-                                    inputId = id + setting.content;
+                                  <FormLayout>
+                                    { headers && headers.map(setting => {
+                                      let inputId;
+                                      if (setting.id) {
+                                        inputId = setting.id;
+                                      } else if (setting.label) {
+                                        inputId = id + translate(setting.label);
+                                      } else if (setting.content) {
+                                        inputId = id + translate(setting.content);
+                                      }
+                                      setting.id = inputId
+                                      return (
+                                        <Input {...setting} key={inputId} />
+                                      )
+                                    })
                                   }
-                                  setting.id = inputId
-                                  return (
-                                    <Input {...setting} key={inputId} />
-                                  )
-                                })
-                              }
                                   { provided.placeholder }
-                                </FormLayout>
+                                  </FormLayout>
                                 </div>
                               )}
 

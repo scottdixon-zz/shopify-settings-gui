@@ -3,7 +3,12 @@ const splitByHeaders = (section) => {
   let temp = [];
   for (let subsectionIndex in section) {
     let subsection = {...section[subsectionIndex]}
+
+    // Settings are broken up into sections,
+    // we need to keep track of their original index
+    // so we can rearrange later
     subsection.originalIndex = subsectionIndex
+    
     if (subsection.type === 'header' && temp.length) {
       // Push what we have so far and reset temp
       split.push([...temp]);
