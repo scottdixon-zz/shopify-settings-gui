@@ -86,6 +86,12 @@ export default [
     ]
   },
   {
-    "name": "Typography"
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "header",
+        "content": "Another Heading Example"
+      }
+    ]
   }
 ];

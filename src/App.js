@@ -15,7 +15,6 @@ class App extends Component {
   };
 
   onDragEnd = (result) => {
-    console.log(result)
     const { destination, source, draggableId } = result;
     if (!destination) {
       return;
@@ -31,13 +30,13 @@ class App extends Component {
       return setting.name === destination.droppableId.split('_')[0]
     })
 
-    // Clone the settings 
+    // Clone the settings
     const settings = [...this.state.settingsSchema];
 
     // Reference the input, move it
     const input = settings[sourceSectionIndex].settings[source.index];
     settings[sourceSectionIndex].settings.splice(source.index, 1);
-    settings[sourceSectionIndex].settings.splice(destination.index, 0, input);
+    settings[destinationSectionIndex].settings.splice(destination.index, 0, input);
 
     this.outputSchema();
   }
