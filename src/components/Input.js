@@ -10,9 +10,10 @@ import {
   Select,
   RangeSlider,
 } from '@shopify/polaris';
+import { Draggable } from 'react-beautiful-dnd';
 
 const inputMap = {
-  heading: Heading,
+  header: Heading,
   color: Color,
   text: TextField,
   textarea: TextArea,
@@ -42,7 +43,17 @@ function Input(props) {
   settings.selected = settings.default
   
   const DynamicComponent = inputMap[settings.type]
-  return <DynamicComponent {...settings} />
+  return (
+    <Draggable draggableId={settings.id} index={parseInt(settings.originalIndex)}>
+    {provided => {
+      return (
+        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="draggable">
+          <DynamicComponent {...settings} />
+        </div>
+      )
+    }}
+    </Draggable>
+  )
 
 }
 

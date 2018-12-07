@@ -11,7 +11,11 @@ export default [
     "name": "Colors",
     "settings": [
       {
-        "type": "heading",
+        "type": "header",
+        "content": "Another Heading Example"
+      },
+      {
+        "type": "header",
         "content": "Heading Example"
       },
       {

@@ -5,7 +5,8 @@ import { AppProvider, Page, Card, Button, Layout, TextStyle, TextField, Subheadi
 import Sticky from 'react-stickynode';
 import Input from './components/Input';
 import settingsSchema from './settings_schema.js';
-import { splitByHeadings, translate } from './utils';
+import { splitByHeaders, translate } from './utils';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 
 class App extends Component {
   state = {
@@ -13,6 +14,43 @@ class App extends Component {
     settingsSchema
   };
   
+  onDragEnd = (result) => {
+    console.log(result)
+    const { destination, source, draggableId } = result;
+    if (!destination) {
+      return;
+    }
+    const destinationSectionIndex = this.state.settingsSchema.findIndex(setting => {
+      return setting.name === destination.droppableId.split('_')[0]
+    })
+
+    const sourceSectionIndex = this.state.settingsSchema.findIndex(setting => {
+      return setting.name === source.droppableId.split('_')[0]
+    })
+
+    const settings = [...this.state.settingsSchema];
+
+    console.log('SOURCE INDEX', sourceSectionIndex)
+    console.log('DESTINATION INDEX', sourceSectionIndex)
+
+    const setting = settings[sourceSectionIndex].settings[source.index];
+
+    console.log(settings[destinationSectionIndex])
+
+    settings[sourceSectionIndex].settings.splice(source.index, 1);
+    settings[sourceSectionIndex].settings.splice(destination.index, 0, setting);
+
+    // settings[destinationSectionIndex].settings.splice(destination.index, 0, setting)
+    console.log(settings)
+    //
+    this.setState({ settingsSchema: settings })
+    // console.log(destinationIndex)
+
+    this.setState({
+      tempJson: JSON.stringify(this.state.settingsSchema, null, 4)
+    })
+  }
+
   componentDidMount = () => {
     this.setState({
       tempJson: JSON.stringify(this.state.settingsSchema, null, 4)
@@ -29,30 +67,59 @@ class App extends Component {
       console.log('Waiting for valid JSON')
     }
   };
-  
+
   render() {
     return (
+    <DragDropContext onDragEnd={this.onDragEnd}>
     <AppProvider>
       <Page fullWidth>
         <Layout>
           <Layout.Section secondary>
           <Card>
-            { this.state.settingsSchema.map && this.state.settingsSchema.map((section) => {
-              // Ignore theme info
+            {
+              this.state.settingsSchema.map && this.state.settingsSchema.map((section) => {
+
+              let originalIndex = 0;
+
               if (section.name == 'theme_info') return
-              
               return (
-                <div>
+                <div key={section.name}>
                   <Card.Section>
                     <p>{ translate(section.name) }</p>
                   </Card.Section>
                   <Card sectioned subdued>
-                    { section.settings && splitByHeadings(section.settings).map(headings => {
+                    { section.settings && splitByHeaders(section.settings).map(headers => {
+
+                      const id = headers[0].content
                       return (
-                        <Card sectioned>
-                          <FormLayout>
-                            { headings && headings.map(setting => <Input {...setting}/>) }
-                          </FormLayout>
+                        <Card sectioned key={id}>
+                          <Droppable droppableId={`${section.name}_${id}`}>
+
+                              {(provided) => (
+                                <div ref={provided.innerRef} {...provided.droppableProps}>
+                                <FormLayout>
+
+                                { headers && headers.map(setting => {
+                                  let inputId;
+                                  if (setting.id) {
+                                    inputId = setting.id;
+                                  } else if (setting.label) {
+                                    inputId = id + setting.label;
+                                  } else if (setting.content) {
+                                    inputId = id + setting.content;
+                                  }
+                                  setting.id = inputId
+                                  return (
+                                    <Input {...setting} key={inputId} />
+                                  )
+                                })
+                              }
+                                  { provided.placeholder }
+                                </FormLayout>
+                                </div>
+                              )}
+
+                          </Droppable>
                         </Card>
                       )
                     }) }
@@ -63,7 +130,12 @@ class App extends Component {
           </Card>
           </Layout.Section>
           <Layout.Section secondary>
-            <Sticky enabled={true} top={0} className="sticky-json">
+            <Card>
+              <Card.Section>
+
+              </Card.Section>
+            </Card>
+
               <Card>
                 <Card.Section>
                   <TextField
@@ -75,12 +147,12 @@ class App extends Component {
                   />
                 </Card.Section>
               </Card>
-            </Sticky>
-            
+
           </Layout.Section>
         </Layout>
       </Page>
     </AppProvider>
+    </DragDropContext>
     );
   }
 }

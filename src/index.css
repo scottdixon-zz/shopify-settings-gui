@@ -20,3 +20,7 @@ textarea {
 .sticky-json textarea {
   height: 94vh !important;
 }
+
+.draggable {
+  background: #fff;
+}
