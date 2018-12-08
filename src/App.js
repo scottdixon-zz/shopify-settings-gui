@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { AppProvider, Page, Card, Layout, TextField, FormLayout } from '@shopify/polaris';
+import { AppProvider, Page, Card, Layout, TextField, FormLayout, Stack } from '@shopify/polaris';
 import Sticky from 'react-stickynode';
 import Input from './components/Input';
 import settingsSchema from './settings_schema.js';
@@ -10,33 +10,49 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 class App extends Component {
   state = {
     tempJson: '',
-    settingsSchema
+    settingsSchema,
+    toolbarDraggingIndex: -1
   };
 
   onDragUpdate = (result) => {
     console.log('update')
     console.dir(JSON.stringify(result))
+    this.setState({ toolbarDraggingIndex: result.source.index })
   };
 
   onDragEnd = (result) => {
     console.dir(result)
     const { destination, source } = result;
-    if (!destination) {
+
+    // Ignore toolbar components dropped elsewhere
+    if (source.droppableId === 'toolbar' && !destination) {
       return;
     }
+
+    // Ignore components dropped onto the toolbar
+    if (destination.droppableId === 'toolbar') {
+      return;
+    }
+
+    // Clone the settings
+    const settings = [...this.state.settingsSchema];
 
     // Which section is our source in?
     const sourceSectionIndex = this.state.settingsSchema.findIndex(setting => {
       return translate(setting.name) === source.droppableId.split('_')[0]
     })
 
+    // Allow items to be removed
+    if (!destination) {
+      settings[sourceSectionIndex].settings.splice(source.index, 1);
+      this.setState({ settingsSchema: settings })
+      return;
+    }
+
     // Which section is our source going to?
     const destinationSectionIndex = this.state.settingsSchema.findIndex(setting => {
       return translate(setting.name) === destination.droppableId.split('_')[0]
     })
-
-    // Clone the settings
-    const settings = [...this.state.settingsSchema];
 
     let desinationIndex = destination.index;
     let input;
@@ -45,7 +61,7 @@ class App extends Component {
       // if (settings[sourceSectionIndex].settings.find(setting => setting.content === 'HEADERZ')) {
       //
       // }
-      input = { type: "header", content: "HEADERZ" }
+      input = { type: "header", content: "Heading" }
     } else {
       // Reference the input, move it
       input = settings[sourceSectionIndex].settings[source.index];
@@ -53,7 +69,7 @@ class App extends Component {
     }
 
     settings[destinationSectionIndex].settings.splice(desinationIndex, 0, input);
-
+    this.setState({ settingsSchema: settings })
 
     this.outputSchema();
   }
@@ -97,21 +113,20 @@ class App extends Component {
                     <p>{ translate(section.name) }</p>
                   </Card.Section>
                   <Card sectioned subdued>
-
-                  <Droppable droppableId={`${translate(section.name)}`}>
+                    <Droppable droppableId={`${translate(section.name)}`}>
                       {(provided, snapshot) => (
-                        <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? 'card-dragging-over' : ''}>
+                        <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? 'card-dragging-over preview' : 'preview'}>
 
-                    { section.settings && splitByHeaders(section.settings).map(headers => {
-                      if (!headers[0]) {
-                        return
-                      }
-                      console.log(snapshot)
+                          { !section.settings.length && <p className="drop-message">Drop some settings here.</p>}
 
-                      const id = section.name + (headers[0].id || translate(headers[0].content) || translate(headers[0].label))
-                      console.log(id)
-                      return (
-                        <Card sectioned key={id} subdued={snapshot.isDraggingOver}>
+
+                          { section.settings && splitByHeaders(section.settings).map(headers => {
+                              // Handle empty sections
+                              if (!headers[0]) return
+
+                              const id = section.name + (headers[0].id || translate(headers[0].content) || translate(headers[0].label))
+                              return (
+                                <Card sectioned key={id} subdued={snapshot.isDraggingOver}>
                                   <FormLayout>
                                     { headers && headers.map(setting => {
                                         let inputId;
@@ -128,35 +143,57 @@ class App extends Component {
                                         )
                                       })
                                     }
+                                    {provided.placeholder}
                                   </FormLayout>
-                        </Card>
-                      )
-                    }) }
-
-                    </div>
-                  )}
-              </Droppable>
+                                </Card>
+                              )
+                            })
+                          }
+                        </div>
+                      )}
+                    </Droppable>
                   </Card>
                 </div>
               )
-            }) }
+            })
+          }
           </Card>
           </Layout.Section>
           <Layout.Section secondary>
             <Card>
               <Card.Section>
-              <Droppable droppableId="toolbar">
+              <Droppable droppableId="toolbar" direction="horizontal">
                 {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps}>
-                    <Draggable draggableId="heading" index={0}>
-                      {provided => {
-                        return (
-                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="draggable">
-                            <p>Heading</p>
-                          </div>
-                        )
-                      }}
-                    </Draggable>
+                  <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
+                    <Stack>
+                      <Draggable draggableId="heading" index={0}>
+                        {provided => {
+                          return (
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 0 ? 'dragging' : 'lock'}>
+                              <p><strong>Heading</strong></p>
+                            </div>
+                          )
+                        }}
+                      </Draggable>
+                      <Draggable draggableId="radio" index={1}>
+                        {provided => {
+                          return (
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 1 ? 'dragging' : 'lock'}>
+                              <input type="radio"/> Radio
+                            </div>
+                          )
+                        }}
+                      </Draggable>
+                      <Draggable draggableId="checkbox" index={2}>
+                        {provided => {
+                          return (
+                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 2 ? 'dragging' : 'lock'}>
+                              <input type="checkbox"/> Checkbox
+                            </div>
+                          )
+                        }}
+                      </Draggable>
+                    </Stack>
                   </div>
                 )}
                 </Droppable>

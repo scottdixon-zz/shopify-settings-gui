@@ -21,7 +21,15 @@ textarea {
   height: 94vh !important;
 }
 
-.card-dragging-over .Polaris-Card{
+.card-dragging-over .Polaris-Card {
   overflow: visible !important;
   box-shadow: none !important;
+}
+
+.card-dragging-over .drop-message {
+  opacity: 0;
+}
+
+#toolbar .lock {
+  transform: none !important;
 }
