@@ -10,6 +10,12 @@ import {
   RangeSlider,
 } from '@shopify/polaris';
 
+const prettify = (str) => {
+  return str.split('_').map(part => {
+      return part.charAt(0).toUpperCase() + part.slice(1);
+  }).join(' ');
+}
+
 const splitByHeaders = (section) => {
   let split = [];
   let temp = [];
@@ -139,4 +145,4 @@ const inputs = {
   }
 }
 
-export { splitByHeaders, translate, inputs };
+export { splitByHeaders, translate, inputs, prettify };

@@ -33,3 +33,7 @@ textarea {
 #toolbar .lock {
   transform: none !important;
 }
+
+#toolbar .Polaris-Card {
+  padding: 5px 10px;
+}

@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
-import { AppProvider, Page, Card, Layout, TextField, FormLayout, Stack } from '@shopify/polaris';
+import { AppProvider, Page, Card, Layout, TextField, FormLayout, Stack, Badge } from '@shopify/polaris';
 import Sticky from 'react-stickynode';
 import Input from './components/Input';
-import settingsSchema from './settings_schema.js';
-import { splitByHeaders, translate, inputs } from './utils';
+// import settingsSchema from './settings_schema.js';
+import { splitByHeaders, translate, inputs, prettify } from './utils';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 class App extends Component {
   state = {
     tempJson: '',
-    settingsSchema,
+    settingsSchema: [{"name": "First section","settings": []}],
     dragging: null
   };
 
@@ -126,7 +126,7 @@ class App extends Component {
                       {provided => {
                         return (
                           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.dragging === input ? 'dragging' : 'lock'}>
-                            <Card subdued>{input}</Card>
+                            <Card subdued>{prettify(input)}</Card>
                           </div>
                         )
                       }}
