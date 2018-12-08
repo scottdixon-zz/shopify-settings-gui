@@ -18,6 +18,29 @@ class App extends Component {
     this.setState({ dragging: draggableId })
   };
 
+  createUniqueId = (input, inputUniqueProperty, destinationSectionIndex, instances) => {
+    instances = instances || 0
+    let id = input[inputUniqueProperty]
+    let needle = instances ? `${id}${inputUniqueProperty === 'id' ? '_' : ' '}${instances}` : id;
+    let matched = false;
+
+    for (let section in this.state.settingsSchema) {
+      console.log('section', section)
+      for (let setting of this.state.settingsSchema[section].settings) {
+        if (setting.type === input.type && setting[inputUniqueProperty] === needle) {
+          matched = true;
+        }
+      }
+    }
+
+    if (!matched) {
+      return needle
+    }
+
+    return this.createUniqueId(input, inputUniqueProperty, destinationSectionIndex, ++instances);
+
+  };
+
   onDragEnd = (result) => {
     console.dir(result)
     const { destination, source, draggableId } = result;
@@ -56,7 +79,9 @@ class App extends Component {
     let input;
 
     if (source.droppableId === 'toolbar') {
-      input = inputs[draggableId].json
+      input = {...inputs[draggableId].json}
+      const inputUniqueProperty = (input.type === 'header') ? 'content' : 'id';
+      input[inputUniqueProperty] = this.createUniqueId(input, inputUniqueProperty, destinationSectionIndex)
     } else {
       // Reference the input, move it
       input = settings[sourceSectionIndex].settings[source.index];
@@ -135,7 +160,6 @@ class App extends Component {
                 }
               })}
               </Stack>
-              {provided.placeholder}
             </div>
           )}
           </Droppable>
