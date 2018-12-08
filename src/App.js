@@ -4,23 +4,23 @@ import { AppProvider, Page, Card, Layout, TextField, FormLayout, Stack } from '@
 import Sticky from 'react-stickynode';
 import Input from './components/Input';
 import settingsSchema from './settings_schema.js';
-import { splitByHeaders, translate } from './utils';
+import { splitByHeaders, translate, inputs } from './utils';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 class App extends Component {
   state = {
     tempJson: '',
     settingsSchema,
-    toolbarDraggingIndex: -1
+    dragging: null
   };
 
-  onDragUpdate = (result) => {
-    this.setState({ toolbarDraggingIndex: result.source.index })
+  onDragUpdate = ({draggableId}) => {
+    this.setState({ dragging: draggableId })
   };
 
   onDragEnd = (result) => {
     console.dir(result)
-    const { destination, source } = result;
+    const { destination, source, draggableId } = result;
 
     // Ignore toolbar components dropped elsewhere
     if (source.droppableId === 'toolbar' && !destination) {
@@ -56,10 +56,7 @@ class App extends Component {
     let input;
 
     if (source.droppableId === 'toolbar') {
-      // if (settings[sourceSectionIndex].settings.find(setting => setting.content === 'HEADERZ')) {
-      //
-      // }
-      input = { type: "header", content: "Heading" }
+      input = inputs[draggableId].json
     } else {
       // Reference the input, move it
       input = settings[sourceSectionIndex].settings[source.index];
@@ -73,8 +70,6 @@ class App extends Component {
   }
 
   updateDimensions = () => {
-    console.log('update')
-    // this.setState({width: $(window).width(), height: $(window).height()});
     if (document.querySelector('#TextField1')) {
       document.querySelector('#TextField1').style.maxHeight = window.innerHeight - 170 + 'px'
     }
@@ -97,6 +92,11 @@ class App extends Component {
   }
 
   handleChange = (tempJson) => {
+    // Handle empty panel
+    if (tempJson === '') {
+      tempJson = JSON.stringify([{"name": "First section","settings": []}], null, 4);
+    }
+
     this.setState({ tempJson });
     try {
       const settingsSchema = JSON.parse(tempJson);
@@ -119,34 +119,23 @@ class App extends Component {
           {(provided) => (
             <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
               <Stack>
-                <Draggable draggableId="heading" index={0}>
-                  {provided => {
-                    return (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 0 ? 'dragging' : 'lock'}>
-                        <Card subdued>Heading</Card>
-                      </div>
-                    )
-                  }}
-                </Draggable>
-                <Draggable draggableId="radio" index={1}>
-                  {provided => {
-                    return (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 1 ? 'dragging' : 'lock'}>
-                        <input type="radio"/> Radio
-                      </div>
-                    )
-                  }}
-                </Draggable>
-                <Draggable draggableId="checkbox" index={2}>
-                  {provided => {
-                    return (
-                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 2 ? 'dragging' : 'lock'}>
-                        <input type="checkbox"/> Checkbox
-                      </div>
-                    )
-                  }}
-                </Draggable>
+              { Object.keys(inputs).map((input, index) => {
+                if (inputs[input].json) {
+                  return (
+                    <Draggable draggableId={input} index={index} key={input}>
+                      {provided => {
+                        return (
+                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.dragging === input ? 'dragging' : 'lock'}>
+                            <Card subdued>{input}</Card>
+                          </div>
+                        )
+                      }}
+                    </Draggable>
+                  )
+                }
+              })}
               </Stack>
+              {provided.placeholder}
             </div>
           )}
           </Droppable>

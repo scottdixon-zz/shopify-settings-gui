@@ -42,16 +42,101 @@ const translate = (content) => {
   }
 }
 
-const inputMap = {
-  header: Heading,
-  color: Color,
-  text: TextField,
-  textarea: TextArea,
-  radio: ChoiceList,
-  checkbox: Checkbox,
-  select: Select,
-  range: RangeSlider,
-  image_picker: ImagePicker,
+const inputs = {
+  header: {
+    component: Heading,
+    json: {
+      type: "header",
+      content: "Heading Example"
+    }
+  },
+  color: {
+    component: Color,
+    json: {
+      type: "color",
+      label: "Colour Example",
+      id: "color_example",
+      default: "#333333"
+    }
+  },
+  text: {
+    component: TextField,
+    json: {
+      type: "text",
+      id: "text_example",
+      default: "",
+      placeholder: "placeholder",
+      label: "Text Example",
+    }
+  },
+  textarea: {
+    component: TextArea,
+    json: {
+      type: "textarea",
+      id: "textarea_example",
+      label: "Textarea Example",
+      info: ""
+    }
+  },
+  radio: {
+    component: ChoiceList,
+    json: {
+      type: "radio",
+      id: "radio_example",
+      label: "Radio Example",
+      options: [
+        { value: "one", label: "Radio one" },
+        { value: "two", label: "Radio two" }
+      ],
+      default: "two"
+    }
+  },
+  checkbox: {
+    component: Checkbox,
+    json: {
+      type: "checkbox",
+      id: "checkbox_example",
+      label: "Checkbox Example",
+      default: false,
+      info: "Optional information about this checkbox"
+    }
+  },
+  select: {
+    component: Select,
+    json: {
+      type: "select",
+      id: "select_example",
+      label: "Select Example",
+      options: [
+        { value: "Option 1", label: "Option 1" },
+        { value: "Option 2", label: "Option 2" }
+      ],
+      default: "Option 2",
+      info: "Optional information about this select"
+    }
+  },
+  range: {
+    component: RangeSlider,
+    json: {
+      type: "range",
+      id: "range_example",
+      min: 12,
+      max: 18,
+      step: 1,
+      unit: "px",
+      label: "Range Example",
+      default: 16,
+      info: "Optional information about this range"
+    }
+  },
+  image_picker: {
+    component: ImagePicker,
+    json: {
+      type: "image_picker",
+      id: "image_picker_example",
+      label: "Image Picker Example"
+    }
+  }
 }
 
-export { splitByHeaders, translate, inputMap };
+export { splitByHeaders, translate, inputs };
