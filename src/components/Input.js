@@ -14,13 +14,13 @@ function Input(props) {
   const DynamicComponent = inputs[settings.type].component;
   return (
     <Draggable draggableId={settings.id+'-'+settings.originalIndex} index={parseInt(settings.originalIndex)}>
-    {provided => {
-      return (
-        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="draggable">
-          { DynamicComponent ? <DynamicComponent {...settings} /> : <p><strong>{settings.type}</strong> not supported yet!</p> }
-        </div>
-      )
-    }}
+      {provided => {
+        return (
+          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="draggable">
+            { DynamicComponent ? <DynamicComponent {...settings} /> : <p><strong>{settings.type}</strong> not supported yet!</p> }
+          </div>
+        )
+      }}
     </Draggable>
   )
 

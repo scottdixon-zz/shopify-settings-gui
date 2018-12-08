@@ -3,8 +3,10 @@ import './App.css';
 import { AppProvider, Page, Card, Layout, TextField, FormLayout, Stack, Badge } from '@shopify/polaris';
 import Sticky from 'react-stickynode';
 import Input from './components/Input';
+import Toolbar from './components/Toolbar';
+
 // import settingsSchema from './settings_schema.js';
-import { splitByHeaders, translate, inputs, prettify } from './utils';
+import { splitByHeaders, translate, inputs } from './utils';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 
 class App extends Component {
@@ -18,6 +20,7 @@ class App extends Component {
     this.setState({ dragging: draggableId })
   };
 
+  // Each input needs a unique ID for Shopify themes and drag & drop
   createUniqueId = (input, inputUniqueProperty, destinationSectionIndex, instances) => {
     instances = instances || 0
     let id = input[inputUniqueProperty]
@@ -25,7 +28,6 @@ class App extends Component {
     let matched = false;
 
     for (let section in this.state.settingsSchema) {
-      console.log('section', section)
       for (let setting of this.state.settingsSchema[section].settings) {
         if (setting.type === input.type && setting[inputUniqueProperty] === needle) {
           matched = true;
@@ -38,11 +40,9 @@ class App extends Component {
     }
 
     return this.createUniqueId(input, inputUniqueProperty, destinationSectionIndex, ++instances);
-
   };
 
   onDragEnd = (result) => {
-    console.dir(result)
     const { destination, source, draggableId } = result;
 
     // Ignore toolbar components dropped elsewhere
@@ -138,40 +138,16 @@ class App extends Component {
     <AppProvider>
       <Page fullWidth>
 
-      <Card>
-        <Card.Section>
-        <Droppable droppableId="toolbar" direction="horizontal">
-          {(provided) => (
-            <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
-              <Stack>
-              { Object.keys(inputs).map((input, index) => {
-                if (inputs[input].json) {
-                  return (
-                    <Draggable draggableId={input} index={index} key={input}>
-                      {provided => {
-                        return (
-                          <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.dragging === input ? 'dragging' : 'lock'}>
-                            <Card subdued>{prettify(input)}</Card>
-                          </div>
-                        )
-                      }}
-                    </Draggable>
-                  )
-                }
-              })}
-              </Stack>
-            </div>
-          )}
-          </Droppable>
-        </Card.Section>
-      </Card>
-      <p>&nbsp;</p>
+        <Toolbar dragging={this.state.dragging} />
+
+        <p>&nbsp;</p>
         <Layout>
           <Layout.Section secondary>
           <Card>
             {
               this.state.settingsSchema.map && this.state.settingsSchema.map((section) => {
 
+              // Some theme settings contain theme_info, we can ignore this
               if (section.name == 'theme_info') return
 
               return (
@@ -184,7 +160,10 @@ class App extends Component {
                       {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? 'card-dragging-over preview' : 'preview'}>
 
-                          { !section.settings.length && <p className="drop-message">Drop settings here!</p>}
+                          {
+                            // If there are no settings yet display a message
+                            !section.settings.length && <p className="drop-message">Drop settings here!</p>
+                          }
 
                           { section.settings && splitByHeaders(section.settings).map(headers => {
                               // Handle empty sections
@@ -195,17 +174,10 @@ class App extends Component {
                                 <Card sectioned key={id} subdued={snapshot.isDraggingOver}>
                                   <FormLayout>
                                     { headers && headers.map(setting => {
-                                        let inputId;
-                                        if (setting.id) {
-                                          inputId = setting.id;
-                                        } else if (setting.label) {
-                                          inputId = id + translate(setting.label);
-                                        } else if (setting.content) {
-                                          inputId = id + translate(setting.content);
-                                        }
-                                        setting.id = inputId
+                                        // Each input needs a unique ID for drag & drop
+                                        setting.id = setting.id || id + translate(setting.content);
                                         return (
-                                          <Input {...setting} key={inputId} />
+                                          <Input {...setting} key={setting.id} />
                                         )
                                       })
                                     }
