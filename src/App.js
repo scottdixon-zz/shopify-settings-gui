@@ -15,8 +15,6 @@ class App extends Component {
   };
 
   onDragUpdate = (result) => {
-    console.log('update')
-    console.dir(JSON.stringify(result))
     this.setState({ toolbarDraggingIndex: result.source.index })
   };
 
@@ -30,7 +28,7 @@ class App extends Component {
     }
 
     // Ignore components dropped onto the toolbar
-    if (destination.droppableId === 'toolbar') {
+    if (destination && destination.droppableId === 'toolbar') {
       return;
     }
 
@@ -74,12 +72,27 @@ class App extends Component {
     this.outputSchema();
   }
 
+  updateDimensions = () => {
+    console.log('update')
+    // this.setState({width: $(window).width(), height: $(window).height()});
+    if (document.querySelector('#TextField1')) {
+      document.querySelector('#TextField1').style.maxHeight = window.innerHeight - 170 + 'px'
+    }
+  }
+
+  componentWillUnmount = () => {
+      window.removeEventListener("resize", this.updateDimensions);
+  }
+
+
   outputSchema = () => {
     const output = [...this.state.settingsSchema];
     this.setState({ tempJson: JSON.stringify(output, null, 4) });
   }
 
   componentDidMount = () => {
+    window.addEventListener("resize", this.updateDimensions);
+    this.updateDimensions();
     this.outputSchema();
   }
 
@@ -99,6 +112,47 @@ class App extends Component {
     <DragDropContext onDragEnd={this.onDragEnd} onDragUpdate={this.onDragUpdate}>
     <AppProvider>
       <Page fullWidth>
+
+      <Card>
+        <Card.Section>
+        <Droppable droppableId="toolbar" direction="horizontal">
+          {(provided) => (
+            <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
+              <Stack>
+                <Draggable draggableId="heading" index={0}>
+                  {provided => {
+                    return (
+                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 0 ? 'dragging' : 'lock'}>
+                        <Card subdued>Heading</Card>
+                      </div>
+                    )
+                  }}
+                </Draggable>
+                <Draggable draggableId="radio" index={1}>
+                  {provided => {
+                    return (
+                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 1 ? 'dragging' : 'lock'}>
+                        <input type="radio"/> Radio
+                      </div>
+                    )
+                  }}
+                </Draggable>
+                <Draggable draggableId="checkbox" index={2}>
+                  {provided => {
+                    return (
+                      <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 2 ? 'dragging' : 'lock'}>
+                        <input type="checkbox"/> Checkbox
+                      </div>
+                    )
+                  }}
+                </Draggable>
+              </Stack>
+            </div>
+          )}
+          </Droppable>
+        </Card.Section>
+      </Card>
+      <p>&nbsp;</p>
         <Layout>
           <Layout.Section secondary>
           <Card>
@@ -117,8 +171,7 @@ class App extends Component {
                       {(provided, snapshot) => (
                         <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? 'card-dragging-over preview' : 'preview'}>
 
-                          { !section.settings.length && <p className="drop-message">Drop some settings here.</p>}
-
+                          { !section.settings.length && <p className="drop-message">Drop settings here!</p>}
 
                           { section.settings && splitByHeaders(section.settings).map(headers => {
                               // Handle empty sections
@@ -160,45 +213,7 @@ class App extends Component {
           </Card>
           </Layout.Section>
           <Layout.Section secondary>
-            <Card>
-              <Card.Section>
-              <Droppable droppableId="toolbar" direction="horizontal">
-                {(provided) => (
-                  <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
-                    <Stack>
-                      <Draggable draggableId="heading" index={0}>
-                        {provided => {
-                          return (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 0 ? 'dragging' : 'lock'}>
-                              <p><strong>Heading</strong></p>
-                            </div>
-                          )
-                        }}
-                      </Draggable>
-                      <Draggable draggableId="radio" index={1}>
-                        {provided => {
-                          return (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 1 ? 'dragging' : 'lock'}>
-                              <input type="radio"/> Radio
-                            </div>
-                          )
-                        }}
-                      </Draggable>
-                      <Draggable draggableId="checkbox" index={2}>
-                        {provided => {
-                          return (
-                            <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={this.state.toolbarDraggingIndex === 2 ? 'dragging' : 'lock'}>
-                              <input type="checkbox"/> Checkbox
-                            </div>
-                          )
-                        }}
-                      </Draggable>
-                    </Stack>
-                  </div>
-                )}
-                </Droppable>
-              </Card.Section>
-            </Card>
+
 
               <Card>
                 <Card.Section>
