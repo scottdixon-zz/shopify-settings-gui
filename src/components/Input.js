@@ -1,6 +1,6 @@
 import React from 'react';
-import { Draggable } from 'react-beautiful-dnd';
-import { translate, inputs } from '../utils';
+import {Draggable} from 'react-beautiful-dnd';
+import {translate, inputs} from '../utils';
 
 function Input(props) {
   const settings = {...props};
@@ -13,8 +13,8 @@ function Input(props) {
 
   const DynamicComponent = inputs[settings.type].component;
   return (
-    <Draggable draggableId={settings.id+'-'+settings.originalIndex} index={parseInt(settings.originalIndex)}>
-      {provided => {
+    <Draggable draggableId={`${settings.id}-${settings.originalIndex}`} index={parseInt(settings.originalIndex, 10)}>
+      {(provided) => {
         return (
           <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className="draggable">
             { DynamicComponent ? <DynamicComponent {...settings} /> : <p><strong>{settings.type}</strong> not supported yet!</p> }
@@ -23,7 +23,6 @@ function Input(props) {
       }}
     </Draggable>
   )
-
 }
 
 export default Input;

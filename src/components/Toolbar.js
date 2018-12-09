@@ -1,9 +1,9 @@
 import React from 'react';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
-import { inputs, prettify } from '../utils';
-import { Card, Stack } from '@shopify/polaris';
+import {Droppable, Draggable} from 'react-beautiful-dnd';
+import {inputs, prettify} from '../utils';
+import {Card, Stack} from '@shopify/polaris';
 
-const Toolbar = ({ dragging }) => (
+const Toolbar = ({dragging}) => (
   <Card>
     <Card.Section>
     <Droppable droppableId="toolbar" direction="horizontal">
@@ -11,7 +11,7 @@ const Toolbar = ({ dragging }) => (
         <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
           <Stack>
             <Draggable draggableId="section" index={0}>
-              {provided => {
+              {(provided) => {
                 return (
                   <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={dragging === 'section' ? 'dragging' : 'lock'}>
                     <Card subdued>Section</Card>

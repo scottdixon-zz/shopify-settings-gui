@@ -11,16 +11,16 @@ import {
 } from '@shopify/polaris';
 
 const prettify = (str) => {
-  return str.split('_').map(part => {
-      return part.charAt(0).toUpperCase() + part.slice(1);
+  return str.split('_').map((part) => {
+    return part.charAt(0).toUpperCase() + part.slice(1);
   }).join(' ');
-}
+};
 
 const splitByHeaders = (section) => {
-  let split = [];
+  const split = [];
   let temp = [];
   for (let subsectionIndex in section) {
-    let subsection = {...section[subsectionIndex]}
+    const subsection = {...section[subsectionIndex]}
 
     // Settings are broken up into sections,
     // we need to keep track of their original index
@@ -36,113 +36,113 @@ const splitByHeaders = (section) => {
   }
   split.push([...temp]);
   return split;
-}
+};
 
 // Label might be a string or a hash of translations
 const translate = (content) => {
-  if (typeof(content) === 'object') {
+  if (typeof content === 'object') {
     // Pull out english if it's available otherwise the first translation
-    return content['en'] || content[Object.keys(content)[0]]
+    return content.en || content[Object.keys(content)[0]];
   } else {
     return content;
   }
-}
+};
 
 const inputs = {
   header: {
     component: Heading,
     json: {
-      type: "header",
-      content: "Heading Example"
-    }
+      type: 'header',
+      content: 'Heading Example',
+    },
   },
   color: {
     component: Color,
     json: {
-      type: "color",
-      label: "Colour Example",
-      id: "color_example",
-      default: "#333333"
-    }
+      type: 'color',
+      label: 'Colour Example',
+      id: 'color_example',
+      default: '#333333',
+    },
   },
   text: {
     component: TextField,
     json: {
-      type: "text",
-      id: "text_example",
-      default: "",
-      placeholder: "placeholder",
-      label: "Text Example",
-    }
+      type: 'text',
+      id: 'text_example',
+      default: '',
+      placeholder: 'placeholder',
+      label: 'Text Example',
+    },
   },
   textarea: {
     component: TextArea,
     json: {
-      type: "textarea",
-      id: "textarea_example",
-      label: "Textarea Example",
-      info: ""
-    }
+      type: 'textarea',
+      id: 'textarea_example',
+      label: 'Textarea Example',
+      info: '',
+    },
   },
   radio: {
     component: ChoiceList,
     json: {
-      type: "radio",
-      id: "radio_example",
-      label: "Radio Example",
+      type: 'radio',
+      id: 'radio_example',
+      label: 'Radio Example',
       options: [
-        { value: "one", label: "Radio one" },
-        { value: "two", label: "Radio two" }
+        {value: 'one', label: 'Radio one'},
+        {value: 'two', label: 'Radio two'},
       ],
-      default: "two"
-    }
+      default: 'two',
+    },
   },
   checkbox: {
     component: Checkbox,
     json: {
-      type: "checkbox",
-      id: "checkbox_example",
-      label: "Checkbox Example",
+      type: 'checkbox',
+      id: 'checkbox_example',
+      label: 'Checkbox Example',
       default: false,
-      info: "Optional information about this checkbox"
-    }
+      info: 'Optional information about this checkbox',
+    },
   },
   select: {
     component: Select,
     json: {
-      type: "select",
-      id: "select_example",
-      label: "Select Example",
+      type: 'select',
+      id: 'select_example',
+      label: 'Select Example',
       options: [
-        { value: "Option 1", label: "Option 1" },
-        { value: "Option 2", label: "Option 2" }
+        {value: 'Option 1', label: 'Option 1'},
+        {value: 'Option 2', label: 'Option 2'},
       ],
-      default: "Option 2",
-      info: "Optional information about this select"
-    }
+      default: 'Option 2',
+      info: 'Optional information about this select',
+    },
   },
   range: {
     component: RangeSlider,
     json: {
-      type: "range",
-      id: "range_example",
+      type: 'range',
+      id: 'range_example',
       min: 12,
       max: 18,
       step: 1,
-      unit: "px",
-      label: "Range Example",
+      unit: 'px',
+      label: 'Range Example',
       default: 16,
-      info: "Optional information about this range"
-    }
+      info: 'Optional information about this range',
+    },
   },
   image_picker: {
     component: ImagePicker,
     json: {
-      type: "image_picker",
-      id: "image_picker_example",
-      label: "Image Picker Example"
-    }
-  }
-}
+      type: 'image_picker',
+      id: 'image_picker_example',
+      label: 'Image Picker Example',
+    },
+  },
+};
 
-export { splitByHeaders, translate, inputs, prettify };
+export {splitByHeaders, translate, inputs, prettify};

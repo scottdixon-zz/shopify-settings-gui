@@ -1,9 +1,9 @@
 import React from 'react';
-import { Subheading } from '@shopify/polaris';
+import {Subheading} from '@shopify/polaris';
 
 function Heading(props) {
   return (
-    <Subheading>{ props.content }</Subheading>
+    <Subheading>{props.content}</Subheading>
   )
 }
 

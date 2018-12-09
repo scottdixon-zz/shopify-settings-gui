@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextField } from '@shopify/polaris';
+import {TextField} from '@shopify/polaris';
 
 function TextArea(props) {
   return (
