@@ -10,7 +10,7 @@ import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 class App extends Component {
   state = {
     tempJson: '',
-    settingsSchema: [{"name": "First section","settings": []}],
+    settingsSchema: [{"name": "Section 1","settings": []}],
     dragging: null
   };
 
@@ -77,6 +77,11 @@ class App extends Component {
     let input;
 
     if (source.droppableId === 'toolbar') {
+      // handle individual sections
+      if (result.draggableId === 'section') {
+        settings.push({ name: `Section ${settings.length+1}`, settings: [] });
+        return this.setState({ settingsSchema: settings }, () => this.outputSchema());
+      }
       input = {...inputs[draggableId].json}
       const inputUniqueProperty = (input.type === 'header') ? 'content' : 'id';
       input[inputUniqueProperty] = this.createUniqueId(input, inputUniqueProperty, destinationSectionIndex)
@@ -116,7 +121,7 @@ class App extends Component {
   handleChange = (tempJson) => {
     // Handle empty panel
     if (tempJson === '') {
-      tempJson = JSON.stringify([{"name": "First section","settings": []}], null, 4);
+      tempJson = JSON.stringify([{"name": "Section 1","settings": []}], null, 4);
     }
 
     this.setState({ tempJson });

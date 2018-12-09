@@ -26,6 +26,17 @@ textarea {
   box-shadow: none !important;
 }
 
+.card-dragging-over.preview .Polaris-Card + .Polaris-Card{
+  /* background: red; */
+  margin-top: 0;
+}
+
+.card-dragging-over.preview .Polaris-Card + .Polaris-Card .Polaris-Card__Section{
+  /* background: red; */
+  /* padding-top: 0;
+  padding-bottom: 0; */
+}
+
 .card-dragging-over .drop-message {
   opacity: 0;
 }

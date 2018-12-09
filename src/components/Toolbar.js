@@ -10,6 +10,15 @@ const Toolbar = ({ dragging }) => (
       {(provided) => (
         <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
           <Stack>
+            <Draggable draggableId="section" index={0}>
+              {provided => {
+                return (
+                  <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps} className={dragging === 'section' ? 'dragging' : 'lock'}>
+                    <Card subdued>Section</Card>
+                  </div>
+                )
+              }}
+            </Draggable>
           { Object.keys(inputs).map((input, index) => {
             if (inputs[input].json) {
               return (
