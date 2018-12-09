@@ -1,7 +1,7 @@
 import React from 'react';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
 import {inputs, prettify, translate, splitByHeaders} from '../utils';
-import {Card, Stack, FormLayout} from '@shopify/polaris';
+import {Card, Stack, FormLayout, Banner} from '@shopify/polaris';
 import Input from './Input';
 
 const SettingSection = ({section}) => (
@@ -10,14 +10,21 @@ const SettingSection = ({section}) => (
     <Card.Section>
       <p>{translate(section.name)}</p>
     </Card.Section>
-    <Card sectioned subdued>
+    <Card sectioned={section.settings.length} subdued>
       <Droppable droppableId={`${translate(section.name)}`}>
         {(provided, snapshot) => (
           <div ref={provided.innerRef} {...provided.droppableProps} className={`preview ${snapshot.isDraggingOver ? 'card-dragging-over' : ''}`}>
 
             {
               // If there are no settings yet display a message
-              !section.settings.length && <p className="drop-message">Drop settings here!</p>
+              !section.settings.length && (
+                <Banner
+                  title="Drag components from above and drop them here"
+                  status="info"
+                >
+                  <p>Or directly edit the JSON</p>
+                </Banner>
+              )
             }
 
             {
