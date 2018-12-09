@@ -139,7 +139,6 @@ class App extends Component {
         <DragDropContext onDragEnd={this.onDragEnd} onDragUpdate={this.onDragUpdate}>
           <Page fullWidth>
             <Toolbar dragging={this.state.dragging} />
-            <p>&nbsp;</p>
             <Layout>
               <Layout.Section secondary>
               <Card>
@@ -154,17 +153,19 @@ class App extends Component {
               </Card>
               </Layout.Section>
               <Layout.Section secondary>
-                <Card>
-                  <Card.Section>
-                    <TextField
-                      labelHidden="true"
-                      placeholder="json"
-                      onChange={this.handleChange}
-                      value={this.state.tempJson}
-                      multiline
-                    />
-                  </Card.Section>
-                </Card>
+                <Sticky enabled={true} top={0} bottomBoundary={1200}>
+                  <Card>
+                    <Card.Section>
+                      <TextField
+                        labelHidden="true"
+                        placeholder="json"
+                        onChange={this.handleChange}
+                        value={this.state.tempJson}
+                        multiline
+                      />
+                    </Card.Section>
+                  </Card>
+                </Sticky>
               </Layout.Section>
             </Layout>
           </Page>

@@ -41,6 +41,10 @@ textarea {
   opacity: 0;
 }
 
+#toolbar {
+  margin-bottom: 2rem;
+}
+
 #toolbar .lock {
   transform: none !important;
 }

@@ -4,11 +4,12 @@ import {inputs, prettify} from '../utils';
 import {Card, Stack} from '@shopify/polaris';
 
 const Toolbar = ({dragging}) => (
+  <div id="toolbar">
   <Card>
     <Card.Section>
     <Droppable droppableId="toolbar" direction="horizontal">
       {(provided) => (
-        <div ref={provided.innerRef} {...provided.droppableProps} id="toolbar">
+        <div ref={provided.innerRef} {...provided.droppableProps}>
           <Stack>
             <Draggable draggableId="section" index={0}>
               {(provided) => {
@@ -40,6 +41,7 @@ const Toolbar = ({dragging}) => (
       </Droppable>
     </Card.Section>
   </Card>
+  </div>
 );
 
 export default Toolbar;
