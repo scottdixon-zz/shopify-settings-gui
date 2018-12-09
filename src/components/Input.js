@@ -17,8 +17,6 @@ function Input(props) {
 
   const DynamicComponent = inputs[settings.type].component;
 
-  console.log(`${settings.id}-${settings.originalIndex}`)
-
   return (
     <Draggable draggableId={`${settings.id}-${settings.originalIndex}`} index={parseInt(settings.originalIndex, 10)}>
       {(provided) => {
