@@ -17,6 +17,13 @@ textarea {
   min-height: 66px !important;
 }
 
+.color-preview {
+  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.1);
+  border-radius: 3px;
+  height: 19px;
+  width: 38px;
+}
+
 .sticky-json textarea {
   height: 94vh !important;
 }
@@ -46,6 +53,6 @@ textarea {
   padding: 5px 10px;
 }
 
-.setting-section .preview .Polaris-FormLayout__Item:first-child .Polaris-Stack__Item {
+.setting-section .preview .Polaris-FormLayout__Item:first-child .color-container .Polaris-Stack__Item {
   margin-top: 0;
 }

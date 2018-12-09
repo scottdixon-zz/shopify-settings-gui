@@ -8,7 +8,7 @@ const SettingSection = ({section}) => (
 
   <div key={translate(section.name)} className="setting-section">
     <Card.Section>
-      <p>{ translate(section.name) }</p>
+      <p>{translate(section.name)}</p>
     </Card.Section>
     <Card sectioned subdued>
       <Droppable droppableId={`${translate(section.name)}`}>
@@ -27,7 +27,7 @@ const SettingSection = ({section}) => (
                   return null;
                 }
 
-                const id = section.name + (headers[0].id || translate(headers[0].content) || translate(headers[0].label));
+                const id = translate(section.name) + (headers[0].id || translate(headers[0].content) || translate(headers[0].label));
                 return (
                   <Card sectioned key={id} subdued={snapshot.isDraggingOver}>
                     <FormLayout>

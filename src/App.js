@@ -124,13 +124,15 @@ class App extends Component {
       tempJson = JSON.stringify([{name: 'Section 1', settings: []}], null, 4);
     }
 
-    this.setState({tempJson});
+    this.setState({tempJson})
+
     try {
       const settingsSchema = JSON.parse(tempJson);
       this.setState({settingsSchema});
     } catch (error) {
       // Waiting for valid JSON
     }
+
   };
 
   render() {
@@ -146,6 +148,7 @@ class App extends Component {
                   this.state.settingsSchema.map && this.state.settingsSchema.map((section) => {
                     // Some theme settings contain theme_info, we can ignore this
                     if (section.name !== 'theme_info') {
+                      console.log(section.name)
                       return <SettingSection section={section} key={section.name} />
                     }
                   })
