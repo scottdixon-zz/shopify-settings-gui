@@ -14,8 +14,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "lint": "eslint . --max-warnings 0"
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -25,12 +24,5 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ],
-  "devDependencies": {
-    "eslint": "^5.10.0",
-    "eslint-plugin-shopify": "^26.1.1"
-  },
-  "eslintConfig": {
-    "extends": "plugin:shopify/esnext"
-  }
+  ]
 }
