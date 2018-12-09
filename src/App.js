@@ -153,7 +153,7 @@ class App extends Component {
               </Card>
               </Layout.Section>
               <Layout.Section secondary>
-                <Sticky enabled={true} top={0} bottomBoundary={1200}>
+                <Sticky enabled={true} top={0} bottomBoundary={0}>
                   <Card>
                     <Card.Section>
                       <TextField

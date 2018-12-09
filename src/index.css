@@ -27,14 +27,7 @@ textarea {
 }
 
 .card-dragging-over.preview .Polaris-Card + .Polaris-Card{
-  /* background: red; */
   margin-top: 0;
-}
-
-.card-dragging-over.preview .Polaris-Card + .Polaris-Card .Polaris-Card__Section{
-  /* background: red; */
-  /* padding-top: 0;
-  padding-bottom: 0; */
 }
 
 .card-dragging-over .drop-message {
@@ -51,4 +44,8 @@ textarea {
 
 #toolbar .Polaris-Card {
   padding: 5px 10px;
+}
+
+.setting-section .preview .Polaris-FormLayout__Item:first-child .Polaris-Stack__Item {
+  margin-top: 0;
 }

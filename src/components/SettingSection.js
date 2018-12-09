@@ -6,14 +6,14 @@ import Input from './Input';
 
 const SettingSection = ({section}) => (
 
-  <div key={translate(section.name)}>
+  <div key={translate(section.name)} className="setting-section">
     <Card.Section>
       <p>{ translate(section.name) }</p>
     </Card.Section>
     <Card sectioned subdued>
       <Droppable droppableId={`${translate(section.name)}`}>
         {(provided, snapshot) => (
-          <div ref={provided.innerRef} {...provided.droppableProps} className={snapshot.isDraggingOver ? 'card-dragging-over preview' : 'preview'}>
+          <div ref={provided.innerRef} {...provided.droppableProps} className={`preview ${snapshot.isDraggingOver ? 'card-dragging-over' : ''}`}>
 
             {
               // If there are no settings yet display a message

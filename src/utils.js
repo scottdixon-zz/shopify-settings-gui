@@ -56,15 +56,6 @@ const inputs = {
       content: 'Heading Example',
     },
   },
-  color: {
-    component: Color,
-    json: {
-      type: 'color',
-      label: 'Colour Example',
-      id: 'color_example',
-      default: '#333333',
-    },
-  },
   text: {
     component: TextField,
     json: {
@@ -133,6 +124,15 @@ const inputs = {
       label: 'Range Example',
       default: 16,
       info: 'Optional information about this range',
+    },
+  },
+  color: {
+    component: Color,
+    json: {
+      type: 'color',
+      label: 'Colour Example',
+      id: 'color_example',
+      default: '#333333',
     },
   },
   image_picker: {
