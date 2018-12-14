@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './App.css';
-import {AppProvider, Page, Card, Layout, TextField, Stack, Badge} from '@shopify/polaris';
+import {AppProvider, Page, Card, Layout, TextField, Stack, Badge, FooterHelp, Link} from '@shopify/polaris';
 import Sticky from 'react-stickynode';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
 import Toolbar from './components/Toolbar';
@@ -138,7 +138,7 @@ class App extends Component {
     return (
       <AppProvider>
         <DragDropContext onDragEnd={this.onDragEnd} onDragUpdate={this.onDragUpdate}>
-          <Page fullWidth>
+          <Page fullWidth title="Theme Settings Builder for Shopify" separator>
             <Toolbar dragging={this.state.dragging} />
             <Layout>
               <Layout.Section secondary>
@@ -169,6 +169,15 @@ class App extends Component {
                 </Sticky>
               </Layout.Section>
             </Layout>
+            <FooterHelp>
+              Learn more about{' '}
+              <Link external url="https://help.shopify.com/en/themes/development/theme-editor/settings-schema">
+                configuring theme settings
+              </Link>
+              .
+              Submit{' '}
+              <Link external url="https://github.com/scottdixon/shopify-settings-gui/issues">bugs & feature requests</Link>.
+            </FooterHelp>
           </Page>
         </DragDropContext>
       </AppProvider>
